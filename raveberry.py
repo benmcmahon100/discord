@@ -149,7 +149,7 @@ async def play(ctx, *, query):
     channel = ctx.channel
     author_id = ctx.author.id
     async with channel.typing():
-        if re.match("playlist", query):
+        if re.search(r'playlist', query):
             r = requests.post(
                 self.post_url,
                 data={"query": query, "playlist": True, "platform": self.platform},
