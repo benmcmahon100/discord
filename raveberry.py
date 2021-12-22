@@ -148,7 +148,7 @@ async def queue(ctx):
         await channel.send(embed=embed)
 
 
-@raveberry.command(aliases=["push", "enqueue", "play", "p"])
+@raveberry.command(aliases=["push", "enqueue", "p"])
 async def play(ctx, *, query):
     self = ctx.bot
     channel = ctx.channel
@@ -171,8 +171,8 @@ async def play(ctx, *, query):
             await ctx.message.add_reaction("⚠")
             await channel.send(r.text)
 
-@raveberry.command(alises=["stop"])
-async def pause(ctx)
+@raveberry.command(alises=["stop", "pause"])
+async def pause(ctx):
     self = ctx.bot
     channel = ctx.channel
     author_id = ctx.author.id
@@ -185,8 +185,8 @@ async def pause(ctx)
         else:
             await ctx.message.add_reaction("⚠")
 
-@raveberry.command(alises=["res"])
-async def resume(ctx)
+@raveberry.command(alises=["res", "resume"])
+async def resume(ctx):
     self = ctx.bot
     channel = ctx.channel
     author_id = ctx.author.id
@@ -200,8 +200,8 @@ async def resume(ctx)
             await ctx.message.add_reaction("⚠")
 
 
-@raveberry.command(aliases=["next", "fs"])
-async def skip(ctx)
+@raveberry.command(aliases=["next", "fs", "skip"])
+async def skip(ctx):
     self = ctx.bot
     channel = ctx.channel
     author_id = ctx.author.id
@@ -296,7 +296,7 @@ async def refresh(ctx):
         await ctx.channel.send("Not in a voice chat. Use 'join' first.")
     path = self.stream_url
     voice.stop()
-    voice.play(discord.FFmpegOpusAudio(path))
+    voice.play(discord.FFmpegPCMAudio(path))
     await ctx.message.add_reaction("👌")
 
 
