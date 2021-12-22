@@ -178,7 +178,7 @@ async def pause(ctx):
     author_id = ctx.author.id
     async with channel.typing():
         r = requests.post(
-            f"{self.control_url}pause/",
+            f"{self.control_url}pause",
         )
         if r.status_code == 200:
             await ctx.message.add_reaction("👌")
@@ -192,7 +192,7 @@ async def resume(ctx):
     author_id = ctx.author.id
     async with channel.typing():
         r = requests.post(
-            f"{self.control_url}play/",
+            f"{self.control_url}play",
         )
         if r.status_code == 200:
             await ctx.message.add_reaction("👌")
@@ -207,7 +207,7 @@ async def skip(ctx):
     author_id = ctx.author.id
     async with channel.typing():
         r = requests.post(
-            f"{self.control_url}skip/",
+            f"{self.control_url}skip",
         )
         if r.status_code == 200:
             await ctx.message.add_reaction("👌")
