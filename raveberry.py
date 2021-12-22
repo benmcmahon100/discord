@@ -96,9 +96,9 @@ help                        Show this message
 join                        Make the bot enter your voice channel
 leave                       Make the bot leave its voice channel
 play/push/enqueue           Add the given song (link or search query) to the queue
-skip/next                   Skip the current song
-pause                       Pause playback
-resume                      Resume playback
+skip/next/fs                Skip the current song
+pause/stop                  Pause playback
+resume/res                  Resume playback
 queue/q                     Show the current queue
 vote_up/voteup/up/+         Vote up a song (by index or name)
 vote_down/votedown/down/-   Vote down a song (by index or name)
@@ -186,7 +186,7 @@ async def pause(ctx):
         else:
             await ctx.message.add_reaction("⚠")
 
-@raveberry.command(alises=["res", "resume"])
+@raveberry.command(alises=["res"])
 async def resume(ctx):
     self = ctx.bot
     channel = ctx.channel
