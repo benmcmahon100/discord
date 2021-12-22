@@ -171,7 +171,7 @@ async def play(ctx, *, query):
             await ctx.message.add_reaction("⚠")
             await channel.send(r.text)
 
-@raveberry.command(alises=["stop", "pause"])
+@raveberry.command(alises=["stop"])
 async def pause(ctx):
     self = ctx.bot
     channel = ctx.channel
@@ -200,7 +200,7 @@ async def resume(ctx):
             await ctx.message.add_reaction("⚠")
 
 
-@raveberry.command(aliases=["next", "fs", "skip"])
+@raveberry.command(aliases=["next", "fs"])
 async def skip(ctx):
     self = ctx.bot
     channel = ctx.channel
