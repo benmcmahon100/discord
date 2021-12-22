@@ -182,6 +182,7 @@ async def pause(ctx):
         )
         if r.status_code == 200:
             await ctx.message.add_reaction("👌")
+            await refresh(ctx)
         else:
             await ctx.message.add_reaction("⚠")
 
@@ -196,6 +197,7 @@ async def resume(ctx):
         )
         if r.status_code == 200:
             await ctx.message.add_reaction("👌")
+            await refresh(ctx)
         else:
             await ctx.message.add_reaction("⚠")
 
@@ -211,6 +213,7 @@ async def skip(ctx):
         )
         if r.status_code == 200:
             await ctx.message.add_reaction("👌")
+            await refresh(ctx)
         else:
             await ctx.message.add_reaction("⚠")
 
