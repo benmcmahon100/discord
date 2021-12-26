@@ -41,6 +41,9 @@ class Raveberry(commands.Bot):
         self.post_url = (
             f"http://{raveberry_hostname}:{raveberry_port}/ajax/musiq/request-music/"
         )
+        self.control_url = (
+            f"http://{raveberry_hostname}:{raveberry_port}/ajax/musiq/"
+        )
         self.vote_url = f"http://{raveberry_hostname}:{raveberry_port}/ajax/musiq/vote/"
         self.stream_url = f"http://{stream_username}:{stream_password}@{stream_hostname}:{stream_port}/stream"
 
@@ -93,6 +96,9 @@ help                        Show this message
 join                        Make the bot enter your voice channel
 leave                       Make the bot leave its voice channel
 play/push/enqueue           Add the given song (link or search query) to the queue
+skip/next/fs                Skip the current song
+pause/stop                  Pause playback
+resume/res                  Resume playback
 queue/q                     Show the current queue
 vote_up/voteup/up/+         Vote up a song (by index or name)
 vote_down/votedown/down/-   Vote down a song (by index or name)
@@ -142,7 +148,7 @@ async def queue(ctx):
         await channel.send(embed=embed)
 
 
-@raveberry.command(aliases=["push", "enqueue"])
+@raveberry.command(aliases=["push", "enqueue", "p"])
 async def play(ctx, *, query):
     self = ctx.bot
     channel = ctx.channel
@@ -164,6 +170,52 @@ async def play(ctx, *, query):
         else:
             await ctx.message.add_reaction("⚠")
             await channel.send(r.text)
+
+@raveberry.command(alises=["stop"])
+async def pause(ctx):
+    self = ctx.bot
+    channel = ctx.channel
+    author_id = ctx.author.id
+    async with channel.typing():
+        r = requests.post(
+            f"{self.control_url}pause",
+        )
+        if r.status_code == 200:
+            await ctx.message.add_reaction("👌")
+            await refresh(ctx)
+        else:
+            await ctx.message.add_reaction("⚠")
+
+@raveberry.command(alises=["res"])
+async def resume(ctx):
+    self = ctx.bot
+    channel = ctx.channel
+    author_id = ctx.author.id
+    async with channel.typing():
+        r = requests.post(
+            f"{self.control_url}play",
+        )
+        if r.status_code == 200:
+            await ctx.message.add_reaction("👌")
+            await refresh(ctx)
+        else:
+            await ctx.message.add_reaction("⚠")
+
+
+@raveberry.command(aliases=["next", "fs"])
+async def skip(ctx):
+    self = ctx.bot
+    channel = ctx.channel
+    author_id = ctx.author.id
+    async with channel.typing():
+        r = requests.post(
+            f"{self.control_url}skip",
+        )
+        if r.status_code == 200:
+            await ctx.message.add_reaction("👌")
+            await refresh(ctx)
+        else:
+            await ctx.message.add_reaction("⚠")
 
 
 async def vote(ctx, query, amount):
@@ -226,7 +278,7 @@ async def join(ctx):
     path = self.stream_url
     # Quality is better with FFmpegOpusAudio
     # voice.play(discord.FFmpegPCMAudio(path))
-    voice.play(discord.FFmpegOpusAudio(path))
+    voice.play(discord.FFmpegPCMAudio(path))
     await ctx.message.add_reaction("👌")
 
 
@@ -247,7 +299,7 @@ async def refresh(ctx):
         await ctx.channel.send("Not in a voice chat. Use 'join' first.")
     path = self.stream_url
     voice.stop()
-    voice.play(discord.FFmpegOpusAudio(path))
+    voice.play(discord.FFmpegPCMAudio(path))
     await ctx.message.add_reaction("👌")
 
 
