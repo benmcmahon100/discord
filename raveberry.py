@@ -221,7 +221,7 @@ async def skip(ctx):
 
 
 @raveberry.command(aliases=["del", "d"])
-async def remove(ctx):
+async def remove(ctx, *, query):
     self = ctx.bot
     channel = ctx.channel
     author_id = ctx.author.id
