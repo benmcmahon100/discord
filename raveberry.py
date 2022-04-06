@@ -97,6 +97,8 @@ join                        Make the bot enter your voice channel
 leave                       Make the bot leave its voice channel
 play/push/enqueue           Add the given song (link or search query) to the queue
 skip/next/fs                Skip the current song
+remove/del/d                Remove a song (by index or name)
+clear/clr                   Clear the entire queue
 pause/stop                  Pause playback
 resume/res                  Resume playback
 queue/q                     Show the current queue
@@ -211,6 +213,55 @@ async def skip(ctx):
         r = requests.post(
             f"{self.control_url}skip",
         )
+        if r.status_code == 200:
+            await ctx.message.add_reaction("👌")
+            await refresh(ctx)
+        else:
+            await ctx.message.add_reaction("⚠")
+
+
+@raveberry.command(aliases=["del", "d"])
+async def remove(ctx, *, query):
+    self = ctx.bot
+    channel = ctx.channel
+    author_id = ctx.author.id
+    async with channel.typing():
+        try:
+            key = self.identify_song(query)
+        except SongDoesNotExistError:
+            await ctx.message.add_reaction("⚠")
+            await channel.send(f"> {ctx.message.content}\nSong does not exist")
+            return
+
+        r = requests.post(
+            f"{self.control_url}remove",
+            data={"key": key}
+        )
+
+        if r.status_code == 200:
+            await ctx.message.add_reaction("👌")
+            await refresh(ctx)
+        else:
+            await ctx.message.add_reaction("⚠")
+
+
+@raveberry.command(aliases=["clear", "clr"])
+async def remove_all(ctx):
+    self = ctx.bot
+    channel = ctx.channel
+    author_id = ctx.author.id
+    async with channel.typing():
+        try:
+            key = self.identify_song(query)
+        except SongDoesNotExistError:
+            await ctx.message.add_reaction("⚠")
+            await channel.send(f"> {ctx.message.content}\nSong does not exist")
+            return
+
+        r = requests.post(
+            f"{self.control_url}remove_all",
+        )
+
         if r.status_code == 200:
             await ctx.message.add_reaction("👌")
             await refresh(ctx)
