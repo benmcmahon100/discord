@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import discord
 import discord.ext.commands as commands
@@ -154,10 +155,16 @@ async def play(ctx, *, query):
     channel = ctx.channel
     author_id = ctx.author.id
     async with channel.typing():
-        r = requests.post(
-            self.post_url,
-            data={"query": query, "playlist": False, "platform": self.platform},
-        )
+        if re.search(r'playlist', query):
+            r = requests.post(
+                self.post_url,
+                data={"query": query, "playlist": True, "platform": self.platform},
+            )
+        else:
+            r = requests.post(
+                self.post_url,
+                data={"query": query, "playlist": False, "platform": self.platform},
+            )
 
         if r.status_code == 200:
             # Songs start with 1 vote, add to dict so users can't upvote a second time
